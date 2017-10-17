@@ -2,6 +2,9 @@ const osmosis = require("osmosis");
 import * as https from "https";
 import * as fs from "fs";
 import {exec} from "child_process";
+import * as R from "ramda";
+import configuration from "./configuration";
+import {asNumber} from "./helpers";
 
 mangaPageDownload("https://mangafox.me/manga/berserk/c001", 1, resizeImages);
 
@@ -13,8 +16,7 @@ function mangaPageDownload(pageUrl: string, pageNumber: number, afterFinishCallb
         'pageNumber': '#series > strong[2]'
     }).data((parsedData: any) => {
         if (pageNumber != asNumber(parsedData.pageNumber)) {
-            console.error(`end of page. Page founded: ${parsedData.pageNumber} page as number: ${asNumber(parsedData.pageNumber)} page passed as argument ${pageNumber}`);
-            afterFinishCallback(pageNumber - 1);
+             afterFinishCallback(pageNumber - 1);
             return;
         } else {
             console.log(parsedData);
@@ -25,12 +27,8 @@ function mangaPageDownload(pageUrl: string, pageNumber: number, afterFinishCallb
 
 }
 
-function asNumber(pageNumber: string): number {
-    return Number(pageNumber.replace(/\D/g, ""));
-}
-
 function processPageDownload(pageUrl: string, fileName: string): void {
-    const file = fs.createWriteStream(`/opt/manga_download/${fileName}`);
+    const file = fs.createWriteStream(`${configuration.mangasFolder}/${fileName}`);
     const request = https.get(pageUrl, (response) => {
       response.pipe(file);
       file.on('finish', () => {
@@ -40,13 +38,10 @@ function processPageDownload(pageUrl: string, fileName: string): void {
   }
 
   function resizeImages(lastPage: number): void {
-    const imageNames = new Array<string>();
-    for(let i = 1; i <= lastPage; i++) {
-        imageNames.push(`/opt/manga_download/berserk_${i}.jpg`);
-    }
+    const images = R.join(" ", R.times(n => `${configuration.mangasFolder}/berserk_${n + 1}.jpg`, lastPage));
 
-    exec(`mogrify -resize 600x800 /opt/manga_download/*.jpg`, () => {
-        exec(`convert ${imageNames.join(" ")} -quality 100 /opt/manga_download/berserk_01.pdf`, () => {
+    exec(`mogrify -resize ${configuration.pageSize} ${configuration.mangasFolder}/*.jpg`, () => {
+        exec(`convert ${images} ${configuration.optionParams} ${configuration.mangasFolder}/berserk_01.pdf`, () => {
             console.log("Its done!");
         });
     });

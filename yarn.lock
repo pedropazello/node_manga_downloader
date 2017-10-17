@@ -20,6 +20,10 @@
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@types/osmosis/-/osmosis-1.0.0.tgz#e6a39408be4de4feb658c563b37f9071e70e05c0"
 
+"@types/ramda@^0.24.17":
+  version "0.24.17"
+  resolved "https://registry.yarnpkg.com/@types/ramda/-/ramda-0.24.17.tgz#9a399c69d102588dea1c6817e4401e8fa780e40b"
+
 "@types/request@^2.0.6":
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/@types/request/-/request-2.0.6.tgz#fe05b206f8ef6378da236698421e904685fcc001"
@@ -517,6 +521,10 @@ punycode@^1.4.1:
 qs@~6.4.0:
   version "6.4.0"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.4.0.tgz#13e26d28ad6b0ffaa91312cd3bf708ed351e7233"
+
+ramda@^0.25.0:
+  version "0.25.0"
+  resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.25.0.tgz#8fdf68231cffa90bc2f9460390a0cb74a29b29a9"
 
 rc@^1.1.7:
   version "1.2.2"
